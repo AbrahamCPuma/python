@@ -1,0 +1,32 @@
+[
+    {
+        "word": "zebra",
+        "attempts": 2,
+        "result": "win"
+    },
+    {
+        "word": "elephant",
+        "attempts": 1,
+        "result": "win"
+    },
+    {
+        "word": "flamingo",
+        "attempts": 2,
+        "result": "win"
+    },
+    {
+        "word": "jaguar",
+        "attempts": 3,
+        "result": "win"
+    },
+    {
+        "word": "salamander",
+        "attempts": 5,
+        "result": "loss"
+    },
+    {
+        "word": "narwhal",
+        "attempts": 5,
+        "result": "loss"
+    }
+]
