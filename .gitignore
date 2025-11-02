@@ -1,0 +1,6 @@
+# Ignore the nested Git repository for the hangman project
+hangman_project/
+
+# Ignore Python's cache and virtual environment files
+__pycache__/
+*.pyc

@@ -12,5 +12,4 @@ for star in range(0,6):
 items = [1,2,3,4,7]
 for i in items:
     print(i)
-else:
-    print('done')
+    
