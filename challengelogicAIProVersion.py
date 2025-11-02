@@ -1,6 +1,7 @@
 # --- CONFIGURATION & CONSTANTS ---
 # Pros often put configurable values at the top as constants.
 # This makes them easy to find and change without digging through the code.
+# These constants define the business rules for user registration.
 MIN_USERNAME_LENGTH = 6
 MIN_PASSWORD_LENGTH = 8
 MIN_AGE = 18
@@ -46,6 +47,7 @@ def main():
     role = input('Write your role (Admin/Moderator):\t')
 
     # 2. Perform Initial Checks (e.g., Banned User)
+    # This is an "early exit" or "guard clause" pattern.
     if user_name in BANNED_USERS:
         print(f'\n❌ Access Denied: The user name "{user_name}" is banned.')
         return # Exit the function early if the user is banned
@@ -63,7 +65,7 @@ def main():
     # 4. Report Results
     print('\n-----Validation Results-----\n')
 
-    # Collect all errors into a list
+    # Collect all validation failures into a list of error messages.
     errors = []
     for field, (is_valid, message) in validations.items():
         if not is_valid:
@@ -71,6 +73,7 @@ def main():
 
     # Display the final outcome
     if not errors:
+        # If the errors list is empty, registration is successful.
         print(f"✔️ Welcome, {user_name}! All details are valid. Registration successful.")
     else:
         print(f"Hello, {user_name}. Please correct the following issues:")

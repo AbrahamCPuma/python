@@ -1,15 +1,19 @@
+# Import necessary libraries.
 import random
 import os
 import json
+# Initialize game variables.
 gamewords = ["owl","bunny","elephant","fox","camel","orangutan","zebra","antelope","baboon","cheetah","dolphin","elephant","flamingo","gorilla","hyena","iguana","jaguar","koala","lemur","meerkat","narwhal","ocelot","panda","quetzal","rhino","salamander","toucan"]
 randomword = random.choice(gamewords)
 numletters = len(randomword)
 blankletters = "_ " * numletters
+# Lists to track the displayed word and guessed letters.
 hanglist = []
 attempts = 0
 guesslist = []
 game_over = False
 
+# Define the filename for the leaderboard.
 LEADERBOARD_FILE = 'leaderboard.json'
 
 def clear_screen():
@@ -24,6 +28,7 @@ def clear_screen():
 
 def load_leaderboard():
     """Loads the leaderboard from a JSON file."""
+    # Use a try-except block to handle cases where the file doesn't exist or is invalid.
     try:
         with open(LEADERBOARD_FILE, 'r') as f:
             return json.load(f)
@@ -33,6 +38,7 @@ def load_leaderboard():
 
 def save_leaderboard(word, attempts, result):
     """Saves a new score to the leaderboard."""
+    # Load existing data, append the new score, and save it back to the file.
     leaderboard = load_leaderboard()
     leaderboard.append({'word': word, 'attempts': attempts, 'result': result})
     with open(LEADERBOARD_FILE, 'w') as f:
@@ -41,6 +47,7 @@ def save_leaderboard(word, attempts, result):
 def display_leaderboard():
     """Displays the top 10 winning scores."""
     leaderboard = load_leaderboard()
+    # Filter the leaderboard to only include wins.
     wins = [score for score in leaderboard if score['result'] == 'win']
 
     # Sort wins by the number of attempts (fewer is better)
@@ -126,6 +133,7 @@ clear_screen()
 for i in range(numletters):
     hanglist.append("_")
 
+# Main game loop, continues as long as there are blanks to be filled.
 while "_" in hanglist:
     # --- Display current game state at the start of each turn ---
     print("==============================================")
@@ -158,6 +166,7 @@ while "_" in hanglist:
         # Incorrect guess: Increment attempts and check for game over
         attempts += 1
         if attempts >= 5:
+            # If max attempts are reached, the game is over.
             clear_screen()
             save_leaderboard(randomword, attempts, 'loss')
             print("\n==============================================")
@@ -168,6 +177,7 @@ while "_" in hanglist:
             break # Exit the main loop immediately
 
 
+# If the loop finishes without the game_over flag being set, the player won.
 if not game_over:
     clear_screen()
     save_leaderboard(randomword, attempts, 'win')

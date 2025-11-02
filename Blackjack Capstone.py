@@ -1,3 +1,4 @@
+# Import necessary libraries. 'random' for card dealing and 'os' for clearing the screen.
 import random
 import os
 
@@ -29,12 +30,15 @@ def checkblackjack(player_score, computer_score,player_cards,computer_cards):
         print("Computer has Blackjack! You LOSE")
         playagain()
     else:
+        # Check if player busts (score > 21).
         if player_score > 21:
+            # If there is an Ace (11), change its value to 1.
             if 11 in player_cards:
                 player_cards.remove(11)
                 player_cards.append(1)
                 player_score = sum(player_cards)
                 
+                # If score is still over 21, player loses.
                 if player_score > 21:
                     print(f"player cards: {player_cards}")
                     print(f"Count: {player_score}\nBUSTED! You LOSE")
@@ -45,6 +49,7 @@ def checkblackjack(player_score, computer_score,player_cards,computer_cards):
                 print(f"player cards: {player_cards}")
                 print(f"Count: {player_score}\nBUSTED! You LOSE")
                 playagain()
+        # Check if computer busts.
         if computer_score > 21:
             if 11 in computer_cards:
                 computer_cards.remove(11)
@@ -68,6 +73,7 @@ def checkblackjack(player_score, computer_score,player_cards,computer_cards):
 
 #   Function to draw a card only if player wants to draw.
 def drawcard(player_cards,computer_cards,cards):
+    # Player draws one card.
     for draws in range(1):
         player_cards.append(random.choice(cards))
     player_score, computer_score = calculate(player_cards, computer_cards)
@@ -75,12 +81,14 @@ def drawcard(player_cards,computer_cards,cards):
     return player_score
 
 def drawcardcomputer(player_cards,computer_cards,cards):
+    # Computer draws one card.
     for draws in range(1):
         computer_cards.append(random.choice(cards))
     player_score, computer_score = calculate(player_cards, computer_cards)
     player_score, computer_score = checkblackjack(player_score, computer_score,player_cards,computer_cards)
     return computer_score
 
+# Function to ask the player if they want to play again.
 def playagain():
     play_again = input("Do you want to play again? Y/N\t").lower()
     if play_again == "y":
@@ -89,10 +97,13 @@ def playagain():
         clear_screen()
         exit()
 
+# Main game loop.
 while True:
+    # Define the deck of cards for each new game.
     cards = [11,2,3,4,5,6,7,8,9,10,10,10,10]
     playagain()
 
+    # Initialize empty hands for player and computer.
     player_cards = []
     computer_cards = []
     play = input("Welcome to Blackjack!, Do you want to play? Y/N\t").lower()
@@ -102,14 +113,17 @@ while True:
         clear_screen()
         exit() # This will terminate the entire program
 
+    # Deal initial cards and calculate scores.
     draw2cards(player_cards, computer_cards,cards)
     player_score, computer_score = calculate(player_cards, computer_cards)
     checkblackjack(player_score, computer_score,player_cards,computer_cards)
     
+    # Display initial hands (hiding computer's second card).
     print(f"player cards: {player_cards}")
     print(f"computer cards: [{computer_cards[0]}, ?]")
     print(f"player = {player_score}, computer = {computer_score}\n")
 
+    # Player's turn loop.
     while player_score < 21:    
         draw = input("Do you want to draw a card? Y/N\t").lower()
         if draw == "y":
@@ -118,10 +132,13 @@ while True:
             print(f"computer cards: [{computer_cards[0]}, ?]")
             print(f"player = {player_score}, computer = {computer_score}\n")
             
+        # If player chooses to stand.
         if draw == "n":
+            # Computer hits if its score is 16 or less.
             if computer_score > 16:
                 computer_score = drawcardcomputer(player_cards,computer_cards,cards)
             print(f"player = {player_score}, computer = {computer_score}\n")
+            # Compare final scores to determine the winner.
             if player_score > computer_score:
                 print("You WIN")
                 

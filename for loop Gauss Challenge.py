@@ -1,3 +1,4 @@
+# Import necessary libraries.
 import random
 import string
 
@@ -16,7 +17,7 @@ in_numbers = int(input("Escribe la cantidad de numeros que quieres para tu contr
 # --- Generate Password ---
 
 # Use list comprehensions to generate the characters and combine them into one list.
-# This is a more concise way to write the original for-loops.
+# This is a more concise and Pythonic way to write the original for-loops.
 password_chars = [random.choice(letters) for _ in range(in_letters)]
 password_chars += [random.choice(char) for _ in range(in_char)]
 password_chars += [random.choice(numbers) for _ in range(in_numbers)]
@@ -25,6 +26,7 @@ password_chars += [random.choice(numbers) for _ in range(in_numbers)]
 random.shuffle(password_chars)
 # Join the list of characters back into a single string.
 password = "".join(password_chars)
+# Print the final generated password.
 print(f"Tu contraseña es: {password}")
 
 

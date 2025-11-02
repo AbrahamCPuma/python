@@ -6,6 +6,7 @@
 
 
 #   -- Variables --
+# The alphabet list includes lowercase, uppercase, numbers, and symbols to be encrypted/decrypted.
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',' ','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ','O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9','!','@','#','$','%','^','&','*','(',')','_','-','+','=','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',]
 message = ""
 encryption_level = 0
@@ -23,12 +24,15 @@ submit = ""
  #  -- Step 1 Encryption Function --
 
 def encryption(message,encryption_level):
+    # Convert the input message string into a list of characters.
     message_list = list(message)
     for letter in message_list:
+        # Find the index of the letter in the alphabet and add the shift amount.
         if letter in alphabet:
             encrypted_index_list.append(alphabet.index(letter) + encryption_level)
         
     for index in encrypted_index_list:
+        # Find the new letter from the alphabet using the shifted index.
         encrypted_message_list.append(alphabet[index])
     #print(encrypted_message_list)
     encrypted_message = "".join(str(encrypted_message_list) for encrypted_message_list in encrypted_message_list)
@@ -39,11 +43,14 @@ def encryption(message,encryption_level):
 #  -- Step 2 Decryption Function --
 
 def decryption(encryption_key):
+    # Loop through the list of encrypted letters.
     for letter in encrypted_message_list:
+        # Find the index of the letter and subtract the shift amount to reverse the encryption.
         if letter in alphabet:
             decrypted_index_list.append(alphabet.index(letter) - encryption_key) 
 
     for index in decrypted_index_list:
+        # Find the original letter from the alphabet using the reversed index.
         decrypted_message_list.append(alphabet[index])
     #print(decrypted_message_list)
     decrypted_message = "".join(str(decrypted_message_list) for decrypted_message_list in decrypted_message_list)
@@ -56,19 +63,23 @@ def decryption(encryption_key):
 print("""    ------------------------------------------------
     You have successfully entered the Cipher program
     ------------------------------------------------\n""")
+# Main program loop that continues until the user types 'exit'.
 while submit != "exit":
     submit = input("Do you want to encrypt or decrypt your message or exit the program?\n:\t").lower()
 
 
     if submit == "encrypt":
+        # Get the message and encryption level from the user.
         message = input("Write your message in one line\n:\t")
         encryption_level = int(input("Write the level of encryption for your message from 1 to 5\n:\t"))
         encryption(message=message,encryption_level=encryption_level)
 
     if submit == "decrypt":
+        # Check if a message has been encrypted first.
         if message == "":
             print("Yo do not have any message to decrypt\n")
         else:    
+            # Get the decryption key from the user.
             encryption_key = int(input("Write the level of decryption for your message from 1 to 5\n:\t"))
             decryption(encryption_key=encryption_key)
 
@@ -78,4 +89,5 @@ while submit != "exit":
                 print("\nYou entered a wrong level of decryption,program will exit for security reasons")
                 submit = "exit"
 
+# Final message when the program loop ends.
 print("\nprogram finished")

@@ -1,5 +1,6 @@
 # --- CONFIGURATION & CONSTANTS ---
 # These are our business rules for the data pipeline.
+# They define what is considered valid data.
 MIN_USERNAME_LENGTH = 6
 MIN_PASSWORD_LENGTH = 8
 MIN_AGE = 18
@@ -7,7 +8,7 @@ VALID_ROLES = ['admin', 'moderator', 'user']
 BANNED_USERS = ['abraham94', 'abraham95']
 
 # --- VALIDATION FUNCTIONS (The "Transform" step) ---
-# These functions are identical to before. They are our reusable cleaning/validation tools.
+# These functions are our reusable cleaning/validation tools. Each has a single responsibility.
 
 def validate_username(username):
     """Checks if the username is valid."""
@@ -39,6 +40,7 @@ def run_user_processing_pipeline(raw_records):
 
     # This loop is the core of the pipeline, processing one record at a time.
     for record in raw_records:
+        # For each record, start with an empty list of errors.
         errors = []
         user_name = record.get('username', '')
 
@@ -46,7 +48,7 @@ def run_user_processing_pipeline(raw_records):
         if user_name in BANNED_USERS:
             errors.append("User is on the banned list")
         
-        # 2. Field-level validation
+        # 2. Field-level validation using the helper functions.
         if not validate_username(user_name):
             errors.append(f"Invalid username: '{user_name}'")
         if not validate_age(record.get('age')):
@@ -57,6 +59,7 @@ def run_user_processing_pipeline(raw_records):
             errors.append(f"Invalid role: '{record.get('role')}'")
 
         # 3. Route the data based on validation results
+        # If there are no errors, the record is clean. Otherwise, it's rejected.
         if not errors:
             clean_records.append(record)
         else:
@@ -71,7 +74,7 @@ def run_user_processing_pipeline(raw_records):
 if __name__ == "__main__":
     # 1. EXTRACT: In a real pipeline, this data would come from a file, database, or API.
     # Here, we simulate it with a list of dictionaries.
-    source_data = [
+    source_data = [ # This is our raw, unprocessed data.
         {'username': 'testuser1', 'age': 30, 'email': 'test1@example.com', 'role': 'Admin'},
         {'username': 'bad', 'age': 25, 'email': 'test2@example.com', 'role': 'User'}, # Bad username
         {'username': 'testuser3', 'age': 17, 'email': 'test3@example.com', 'role': 'User'}, # Bad age
@@ -81,7 +84,7 @@ if __name__ == "__main__":
         {'username': 'testuser6', 'age': 50, 'email': 'test6@example.com', 'role': 'user'},
     ]
 
-    # 2. TRANSFORM: Run the main processing function
+    # 2. TRANSFORM: Run the main processing function to clean and validate the data.
     valid_users, invalid_users = run_user_processing_pipeline(source_data)
 
     # 3. LOAD: In a real pipeline, this data would be written to a data warehouse,
@@ -94,4 +97,3 @@ if __name__ == "__main__":
     print(f"\n❌ {len(invalid_users)} Rejected Records to be sent to quarantine for review:")
     for user in invalid_users:
         print(f"  - {user}")
-

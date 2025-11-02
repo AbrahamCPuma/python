@@ -1,5 +1,6 @@
 # Let's use the data structure from the exercise: a list of dictionaries.
 # This is a more common and flexible way to handle records.
+# Each dictionary represents a single student.
 # I've also converted the scores from strings to floats here.
 students = [
     {'name': 'Abraham', 'scores': [40.0, 30.4, 100.3]},
@@ -16,6 +17,7 @@ def calculate_and_assign_grades(student_list):
     Calculates average scores and assigns grades for a list of students.
     This function modifies the dictionaries in the list directly.
     """
+    # Loop through each student dictionary in the list.
     for student in student_list:
         # The scores are already floats, so no conversion is needed here.
         scores = student['scores']
@@ -40,9 +42,10 @@ def calculate_and_assign_grades(student_list):
         student['grade'] = grade
     return student_list
 
+# Call the function with the student data and store the result.
 graded_students = calculate_and_assign_grades(students)
 
 print('-----------Final Results-----------')
+# Loop through the updated list of students and print their final grades.
 for student in graded_students:
     print(f"Name: {student['name']}, Average: {student['average']}, Grade: {student['grade']}")
-

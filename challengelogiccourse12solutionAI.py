@@ -1,3 +1,4 @@
+# --- User Input Section ---
 print('-----Initialize-----\n')
 user_name = input('Write your user name:\t')
 age_input = input('\nWrite your age:\t')
@@ -5,6 +6,7 @@ pwd = input('\nWrite your password:\t')
 email = input('\nWrite your email:\t')
 role = input('\nWrite your role:\t')
 
+# A list of banned usernames.
 banned_list = ['abraham94','abraham95']
 
 # --- VALIDATIONS ---
@@ -44,6 +46,7 @@ if email and '@' in email and email.endswith('.com'):
 # --- RESULTS ---
 print('\n-----Results-----\n')
 
+# First, check if the user is on the banned list. This is a great first step.
 # First, check the banned list. This is a great first step.
 if user_name in banned_list:
     print(f'The user name "{user_name}" is BANNED.\n')
@@ -51,6 +54,7 @@ else:
     # Now, check each validation result.
 
     # Combined username and age check for the initial message
+    # This provides a general welcome or error message before showing details.
     if is_username_valid and is_age_valid:
         print(f'Welcome, {user_name}! Your registration details are being processed.')
     else:
@@ -81,10 +85,10 @@ else:
         print(f'❌ Your email "{email}" is not valid. It must contain "@" and end with ".com".')
 
     # Check role
+    # Using .lower() makes the comparison case-insensitive.
     if role.lower() == 'admin':
         print(f'✔️ You registered as an Admin.')
     elif role.lower() == 'moderator':
         print(f'✔️ You registered as a Moderator.')
     else:
         print(f'❌ Your role is not valid. Please enter "Admin" or "Moderator".')
-
