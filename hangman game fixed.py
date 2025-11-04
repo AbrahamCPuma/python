@@ -17,14 +17,9 @@ game_over = False
 LEADERBOARD_FILE = 'leaderboard.json'
 
 def clear_screen():
-    """Clears the output screen. Works in standard terminals and Google Colab."""
-    try:
-        # This works in Google Colab
-        from google.colab import output
-        output.clear()
-    except ImportError:
-        # This works in standard terminals (Windows, macOS, Linux)
-        os.system('cls' if os.name == 'nt' else 'clear')
+   
+    # This works in standard terminals (Windows, macOS, Linux)
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def load_leaderboard():
     """Loads the leaderboard from a JSON file."""
