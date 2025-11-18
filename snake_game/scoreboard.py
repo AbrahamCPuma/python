@@ -1,11 +1,14 @@
 from turtle import Turtle
 ALIGNMENT = "center"
 FONT = ('Calibri', 18, 'normal')
+FILE_PATH = "D:/python/learningbasicpy/snake_game/data.txt"
+
 
 class Scoreboard(Turtle):
     def __init__(self):
         super().__init__()
         self.score = 0
+        self.highscore = 0
         self.color("white")
         self.penup()
         self.goto(0,270)
@@ -13,15 +16,20 @@ class Scoreboard(Turtle):
         self.hideturtle()
         
     def update_scoreboard(self):
-        self.write(f"Score: {self.score}", False, align= ALIGNMENT, font= FONT)
+        self.clear()
+        with open(FILE_PATH,mode="r") as data:
+            self.highscore = data.read()
+        self.write(f"Score: {self.score} High Score: {self.highscore}", False, align= ALIGNMENT, font= FONT)
      
         
     def increase_score(self):
         self.score += 1
-        self.clear()
         self.update_scoreboard()
 
 
-    def gameover(self):
-        self.goto(0,0)
-        self.write(f"GAME OVER", False, align= ALIGNMENT, font= FONT)
+    def reset(self):
+        if self.score > int(self.highscore):
+            with open(FILE_PATH,mode="w") as data:
+                data.write(f"{self.score}")
+        self.score = 0
+        self.update_scoreboard()
