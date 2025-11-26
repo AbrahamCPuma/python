@@ -6,6 +6,7 @@ import random
 import string
 import pyperclip
 
+csv_path = "D:/python/learningbasicpy/password-manager-start/passwordData.csv"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def generator():
@@ -39,32 +40,50 @@ def generator():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-    website = input_web.get()
+    website = input_web.get().capitalize()
     email = input_email.get()
     password = input_pass.get()
+    df = pd.read_csv(csv_path)
 
-    if website == "":
-        messagebox.showerror(title="Error",message="Please add a website")
-    elif password == "":
-        messagebox.showerror(title="Error",message="Please add a password")
-    elif email == "":
-        messagebox.showerror(title="Error",message="Please add an email")
+    if website in df['website'].values:
+        messagebox.showerror(title="Error",message="That Website is already saved")
     else:
-        is_ok = messagebox.askokcancel(title=website,message=f"These are the details entered: \nEmail: {email} \nPassword: {password} \nIs it ok to save?")
-        if is_ok:
-            data = {
-                "website": [website],
-                "email": [email],
-                "password": [password]
-            }
-            export_data = pd.DataFrame(data)
-            csv_path = "D:/python/learningbasicpy/password-manager-start/passwordData.csv"
-            if not os.path.isfile(csv_path):
-                export_data.to_csv(csv_path, index=False)
-            else:
-                export_data.to_csv(csv_path, mode="a", header=False, index=False)
-    
 
+        if website == "":
+            messagebox.showerror(title="Error",message="Please add a website")
+        elif password == "":
+            messagebox.showerror(title="Error",message="Please add a password")
+        elif email == "":
+            messagebox.showerror(title="Error",message="Please add an email")
+        else:
+            is_ok = messagebox.askokcancel(title=website,message=f"These are the details entered: \nEmail: {email} \nPassword: {password} \nIs it ok to save?")
+            if is_ok:
+                data = {
+                    "website": [website],
+                    "email": [email],
+                    "password": [password]
+                }
+                export_data = pd.DataFrame(data)
+                
+                if not os.path.isfile(csv_path):
+                    export_data.to_csv(csv_path, index=False)
+                else:
+                    export_data.to_csv(csv_path, mode="a", header=False, index=False)
+
+# ---------------------------- SEARCH ------------------------------- #
+    
+def search():
+    df = pd.read_csv(csv_path, index_col="website")
+    website = input_web.get().capitalize()
+    try:
+        email = df.loc[website,'email']
+        password = df.loc[website,'password']
+    except:
+        
+        messagebox.showerror(title=website,message=f"Website not found")
+    else:
+        messagebox.showinfo(title=website,message=f"Email: {email} \nPassword: {password}")
+        pyperclip.copy(password)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -92,8 +111,8 @@ lb_pass.grid(column=0, row=3)
 
 # column 1
 
-input_web = tk.Entry(width=51,highlightbackground="lightblue",highlightthickness=2)
-input_web.grid(column=1,row=1,columnspan=2,sticky=tk.W)
+input_web = tk.Entry(width=31,highlightbackground="lightblue",highlightthickness=2)
+input_web.grid(column=1,row=1,sticky=tk.W)
 input_web.focus()
 
 input_email = tk.Entry(width=51,highlightbackground="lightblue",highlightthickness=2)
@@ -110,5 +129,8 @@ bt_add.grid(column=1,row=4,columnspan=2,sticky=tk.W)
 
 bt_gen_pass = tk.Button(text="Generate Password",bg="white",highlightbackground="black",highlightthickness=2,command=generator)
 bt_gen_pass.grid(column=2,row=3,sticky=tk.W)
+
+bt_search = tk.Button(width=14,text="Search",bg="white",highlightbackground="black",highlightthickness=2,command=search)
+bt_search.grid(column=2,row=1,sticky=tk.W)
 
 window.mainloop()
