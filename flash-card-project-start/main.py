@@ -70,7 +70,7 @@ def show_word():
 
 window = tk.Tk()
 window.config(padx=50, pady=50, bg=BACKGROUND_COLOR)
-
+window.title("Flashy - French Learner")
 
 
 img_card_front = tk.PhotoImage(file="learningbasicpy/flash-card-project-start/images/card_front.png")
